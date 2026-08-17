@@ -76,7 +76,7 @@ and `/admin` show a "not yet connected" notice instead of erroring.
 
 ## Project structure
 
-- `app/homepage-content.html`, `public/styles.css`, `public/script.js` — the
+- `app/homepage-content.html`, `app/styles.css`, `public/script.js` — the
   original static homepage, untouched
 - `app/blog`, `app/videos`, `app/podcast` — public content routes
 - `app/admin` — the staff publishing UI (`(protected)` route group requires sign-in)
@@ -84,5 +84,7 @@ and `/admin` show a "not yet connected" notice instead of erroring.
 - `lib/supabase` — Supabase client helpers (browser + server)
 - `lib/content` — shared types and read queries
 - `supabase/migrations` — database schema
-- `public/content.css` — styling for the content hub and admin, built on the
-  design tokens in `public/styles.css`
+- `app/content.css` — styling for the content hub and admin, built on the
+  design tokens in `app/styles.css`. Both are imported in `app/layout.tsx`
+  so Next.js bundles them with a content hash — a fresh, cache-safe URL on
+  every deploy.
