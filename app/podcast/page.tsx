@@ -3,7 +3,7 @@ import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import WaFloat from '@/components/WaFloat';
 import EmptyState from '@/components/EmptyState';
-import { getPublishedEpisodes } from '@/lib/content/queries';
+import { getPublishedEpisodes, getSiteSettings } from '@/lib/content/queries';
 import { isSupabaseConfigured } from '@/lib/supabase/is-configured';
 
 export const metadata: Metadata = {
@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function PodcastPage() {
-  const episodes = await getPublishedEpisodes();
+  const [episodes, settings] = await Promise.all([getPublishedEpisodes(), getSiteSettings()]);
 
   return (
     <>
-      <SiteNav />
-      <WaFloat />
+      <SiteNav logoUrl={settings.logo_url} />
+      <WaFloat number={settings.whatsapp_number} />
 
       <section className="content-hero">
         <div className="content-hero-inner">
@@ -83,7 +83,7 @@ export default async function PodcastPage() {
         </div>
       </section>
 
-      <SiteFooter />
+      <SiteFooter logoUrl={settings.logo_url} />
     </>
   );
 }

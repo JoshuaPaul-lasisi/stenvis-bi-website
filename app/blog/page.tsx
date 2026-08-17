@@ -4,7 +4,7 @@ import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import WaFloat from '@/components/WaFloat';
 import EmptyState from '@/components/EmptyState';
-import { getPublishedPosts } from '@/lib/content/queries';
+import { getPublishedPosts, getSiteSettings } from '@/lib/content/queries';
 import { isSupabaseConfigured } from '@/lib/supabase/is-configured';
 
 export const metadata: Metadata = {
@@ -21,14 +21,14 @@ export default async function BlogIndexPage({
   searchParams: Promise<{ category?: string }>;
 }) {
   const { category } = await searchParams;
-  const posts = await getPublishedPosts();
+  const [posts, settings] = await Promise.all([getPublishedPosts(), getSiteSettings()]);
   const categories = Array.from(new Set(posts.map((p) => p.category).filter((c): c is string => Boolean(c))));
   const filtered = category ? posts.filter((p) => p.category === category) : posts;
 
   return (
     <>
-      <SiteNav />
-      <WaFloat />
+      <SiteNav logoUrl={settings.logo_url} />
+      <WaFloat number={settings.whatsapp_number} />
 
       <section className="content-hero">
         <div className="content-hero-inner">
@@ -101,7 +101,7 @@ export default async function BlogIndexPage({
         </div>
       </section>
 
-      <SiteFooter />
+      <SiteFooter logoUrl={settings.logo_url} />
     </>
   );
 }

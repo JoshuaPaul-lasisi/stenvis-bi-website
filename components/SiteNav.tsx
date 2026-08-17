@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Logo from '@/components/Logo';
 
-export default function SiteNav() {
+export default function SiteNav({ logoUrl }: { logoUrl?: string | null }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -26,7 +27,7 @@ export default function SiteNav() {
   return (
     <nav id="navbar" className={scrolled ? 'scrolled' : ''}>
       <Link href="/" className="logo">
-        <div className="logo-icon">📊</div>
+        <Logo url={logoUrl} />
         Stenvis <span>BI</span>
       </Link>
       <ul className={open ? 'nav-links open' : 'nav-links'} id="navLinks">

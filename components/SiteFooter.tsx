@@ -1,13 +1,14 @@
 import Link from 'next/link';
+import Logo from '@/components/Logo';
 
-export default function SiteFooter() {
+export default function SiteFooter({ logoUrl }: { logoUrl?: string | null }) {
   return (
     <footer>
       <div className="footer-inner">
         <div className="footer-top">
           <div className="footer-brand">
             <div className="footer-logo">
-              <div className="logo-icon">📊</div>
+              <Logo url={logoUrl} />
               Stenvis <span>BI</span>
             </div>
             <p>

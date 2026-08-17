@@ -150,6 +150,10 @@
   color:var(--text-muted); transition:all 0.2s;
 }
 .admin-sidebar-nav a:hover { background:var(--teal-light); color:var(--teal); }
+.admin-sidebar-group-label {
+  font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em;
+  color:var(--text-sub); padding:14px 12px 4px;
+}
 .admin-sidebar-footer { border-top:1px solid var(--border); padding-top:16px; }
 .admin-user { font-size:0.8rem; font-weight:600; margin-bottom:10px; color:var(--text-muted); }
 .admin-signout-btn {
@@ -218,6 +222,21 @@
 }
 .admin-status-toggle { display:flex; align-items:center; gap:9px; font-size:0.84rem; font-weight:600; color:var(--text-muted); }
 .admin-status-toggle input { accent-color:var(--teal); width:16px; height:16px; }
+
+.admin-form-section-title {
+  font-size:0.95rem; font-weight:700; margin:28px 0 12px;
+  padding-top:20px; border-top:1px solid var(--border);
+}
+.admin-form-hint { font-size:0.76rem; font-weight:500; color:var(--text-sub); text-transform:none; letter-spacing:normal; }
+.admin-repeat-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.admin-repeat-row input[type="text"],
+.admin-repeat-row input[type="number"] {
+  flex:1; background:var(--bg-alt); border:1.5px solid var(--border);
+  border-radius:10px; padding:10px 13px; color:var(--text); font-size:0.85rem;
+}
+.admin-repeat-row-num { flex:0 0 70px !important; }
+.admin-repeat-row-color { flex:0 0 40px; height:38px; padding:2px; border:1.5px solid var(--border); border-radius:8px; background:var(--bg-alt); }
+.admin-repeat-row .admin-icon-btn { flex-shrink:0; }
 
 .image-upload-field { display:flex; flex-direction:column; gap:10px; }
 .image-upload-preview { width:100%; max-width:260px; border-radius:12px; display:block; }

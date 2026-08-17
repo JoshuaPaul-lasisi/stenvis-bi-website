@@ -4,16 +4,37 @@ import { createClient } from '@/lib/supabase/server';
 import { deletePost, setPostStatus } from '@/app/actions/posts';
 import { deleteVideo, setVideoStatus } from '@/app/actions/videos';
 import { deleteEpisode, setEpisodeStatus } from '@/app/actions/podcast';
+import { deleteCaseStudy, setCaseStudyStatus } from '@/app/actions/case-studies';
+import { deleteTestimonial, setTestimonialStatus } from '@/app/actions/testimonials';
+import { deleteTeamMember, setTeamMemberStatus } from '@/app/actions/team';
 import ConfirmSubmitButton from '@/components/admin/ConfirmSubmitButton';
-import type { Post, Video, PodcastEpisode, ContentStatus } from '@/lib/content/types';
+import type {
+  Post,
+  Video,
+  PodcastEpisode,
+  CaseStudy,
+  Testimonial,
+  TeamMember,
+  ContentStatus,
+} from '@/lib/content/types';
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient();
 
-  const [{ data: posts }, { data: videos }, { data: episodes }] = await Promise.all([
+  const [
+    { data: posts },
+    { data: videos },
+    { data: episodes },
+    { data: caseStudies },
+    { data: testimonials },
+    { data: team },
+  ] = await Promise.all([
     supabase.from('posts').select('*').order('created_at', { ascending: false }),
     supabase.from('videos').select('*').order('created_at', { ascending: false }),
     supabase.from('podcast_episodes').select('*').order('created_at', { ascending: false }),
+    supabase.from('case_studies').select('*').order('display_order', { ascending: true }),
+    supabase.from('testimonials').select('*').order('display_order', { ascending: true }),
+    supabase.from('team_members').select('*').order('display_order', { ascending: true }),
   ]);
 
   return (
@@ -63,6 +84,51 @@ export default async function AdminDashboardPage() {
           />
         ))}
         {(episodes ?? []).length === 0 && <p className="admin-empty-row">No episodes yet.</p>}
+      </AdminSection>
+
+      <AdminSection title="Case Studies" newHref="/admin/case-studies/new" count={caseStudies?.length ?? 0}>
+        {(caseStudies ?? []).map((cs: CaseStudy) => (
+          <AdminRow
+            key={cs.id}
+            title={cs.title}
+            meta={cs.tag}
+            status={cs.status}
+            editHref={`/admin/case-studies/${cs.id}/edit`}
+            toggleAction={setCaseStudyStatus.bind(null, cs.id, cs.status === 'published' ? 'draft' : 'published')}
+            deleteAction={deleteCaseStudy.bind(null, cs.id)}
+          />
+        ))}
+        {(caseStudies ?? []).length === 0 && <p className="admin-empty-row">No case studies yet.</p>}
+      </AdminSection>
+
+      <AdminSection title="Testimonials" newHref="/admin/testimonials/new" count={testimonials?.length ?? 0}>
+        {(testimonials ?? []).map((t: Testimonial) => (
+          <AdminRow
+            key={t.id}
+            title={t.author_name}
+            meta={t.author_role}
+            status={t.status}
+            editHref={`/admin/testimonials/${t.id}/edit`}
+            toggleAction={setTestimonialStatus.bind(null, t.id, t.status === 'published' ? 'draft' : 'published')}
+            deleteAction={deleteTestimonial.bind(null, t.id)}
+          />
+        ))}
+        {(testimonials ?? []).length === 0 && <p className="admin-empty-row">No testimonials yet.</p>}
+      </AdminSection>
+
+      <AdminSection title="Team" newHref="/admin/team/new" count={team?.length ?? 0}>
+        {(team ?? []).map((member: TeamMember) => (
+          <AdminRow
+            key={member.id}
+            title={member.name}
+            meta={member.role}
+            status={member.status}
+            editHref={`/admin/team/${member.id}/edit`}
+            toggleAction={setTeamMemberStatus.bind(null, member.id, member.status === 'published' ? 'draft' : 'published')}
+            deleteAction={deleteTeamMember.bind(null, member.id)}
+          />
+        ))}
+        {(team ?? []).length === 0 && <p className="admin-empty-row">No team members yet.</p>}
       </AdminSection>
     </div>
   );

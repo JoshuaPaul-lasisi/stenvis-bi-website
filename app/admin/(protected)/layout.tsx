@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/supabase/is-configured';
+import { getSiteSettings } from '@/lib/content/queries';
+import Logo from '@/components/Logo';
 import SignOutButton from '@/components/admin/SignOutButton';
 
 export default async function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
@@ -32,18 +34,26 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
     redirect('/admin/login');
   }
 
+  const settings = await getSiteSettings();
+
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
         <Link href="/" className="logo admin-logo">
-          <div className="logo-icon">📊</div>
+          <Logo url={settings.logo_url} />
           Stenvis <span>BI</span>
         </Link>
         <nav className="admin-sidebar-nav">
           <Link href="/admin">Dashboard</Link>
+          <Link href="/admin/settings">Site Settings</Link>
+          <div className="admin-sidebar-group-label">Content</div>
           <Link href="/admin/posts/new">+ New Post</Link>
           <Link href="/admin/videos/new">+ New Video</Link>
           <Link href="/admin/podcast/new">+ New Episode</Link>
+          <div className="admin-sidebar-group-label">Homepage</div>
+          <Link href="/admin/case-studies/new">+ New Case Study</Link>
+          <Link href="/admin/testimonials/new">+ New Testimonial</Link>
+          <Link href="/admin/team/new">+ New Team Member</Link>
         </nav>
         <div className="admin-sidebar-footer">
           <div className="admin-user">{profile.full_name || user.email}</div>

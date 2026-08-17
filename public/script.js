@@ -1,28 +1,3 @@
-// ─── THEME ───
-(function() {
-  const saved = localStorage.getItem('stenvis-theme') || 'light';
-  document.documentElement.setAttribute('data-theme', saved);
-})();
-
-function toggleTheme() {
-  const html = document.documentElement;
-  const current = html.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('stenvis-theme', next);
-}
-
-// ─── NAV ───
-function toggleNav() {
-  document.getElementById('navLinks').classList.toggle('open');
-}
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-});
-document.querySelectorAll('#navLinks a').forEach(a => {
-  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
-});
-
 // ─── SCROLL REVEAL ───
 document.documentElement.classList.add('js-on');
 const revealObs = new IntersectionObserver((entries) => {

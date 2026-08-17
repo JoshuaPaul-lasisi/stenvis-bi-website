@@ -4,7 +4,7 @@ import Link from 'next/link';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import WaFloat from '@/components/WaFloat';
-import { getPostBySlug } from '@/lib/content/queries';
+import { getPostBySlug, getSiteSettings } from '@/lib/content/queries';
 import { renderMarkdown } from '@/lib/markdown';
 
 export const revalidate = 60;
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const [post, settings] = await Promise.all([getPostBySlug(slug), getSiteSettings()]);
   if (!post) notFound();
 
   const html = renderMarkdown(post.body_markdown);
@@ -41,8 +41,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <>
-      <SiteNav />
-      <WaFloat />
+      <SiteNav logoUrl={settings.logo_url} />
+      <WaFloat number={settings.whatsapp_number} />
       <article className="article">
         <div className="article-inner">
           <Link href="/blog" className="article-back">← Back to Blog</Link>
@@ -65,7 +65,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           )}
         </div>
       </article>
-      <SiteFooter />
+      <SiteFooter logoUrl={settings.logo_url} />
     </>
   );
 }
